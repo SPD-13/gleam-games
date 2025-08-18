@@ -1,0 +1,13 @@
+version: "3"
+services:
+  web:
+    build: ./frontend
+    image: gleam-frontend
+    volumes:
+      - ./frontend/app:/app
+
+  server:
+    build: ./backend
+    image: gleam-backend
+    volumes:
+      - ./backend/app:/app
