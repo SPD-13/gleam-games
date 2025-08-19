@@ -1,3 +1,4 @@
+import app/api.{type Outgoing}
 import gleam/dict
 import gleam/erlang/process.{type Subject}
 import gleam/int
@@ -10,10 +11,6 @@ type State {
     clients: dict.Dict(String, Subject(Outgoing)),
     games: dict.Dict(String, String),
   )
-}
-
-pub type Outgoing {
-  HostResponse(code: String)
 }
 
 pub type Incoming {
@@ -45,7 +42,7 @@ fn hub(state: State, message: Incoming) -> actor.Next(State, Incoming) {
       case response_subject {
         Ok(subject) -> {
           let room_code = generate_room_code()
-          process.send(subject, HostResponse(room_code))
+          process.send(subject, api.HostResponse(room_code))
           actor.continue(
             State(..state, games: state.games |> dict.insert(room_code, id)),
           )

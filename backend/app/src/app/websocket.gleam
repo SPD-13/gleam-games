@@ -1,9 +1,11 @@
+import app/api
 import app/context
 import app/hub
 import gleam/bytes_tree
 import gleam/erlang/process
 import gleam/http/request
 import gleam/http/response
+import gleam/json
 import gleam/list
 import gleam/option.{Some}
 import mist
@@ -12,10 +14,32 @@ pub fn handle_websocket(req, context: context.Context) {
   use user_id <- get_user_id(req)
   mist.websocket(
     req,
-    fn(state, message, _conn) {
+    fn(state, message, conn) {
       case message {
-        mist.Text(_msg) -> mist.continue(state)
-        mist.Custom(_out) -> mist.continue(state)
+        mist.Text(msg) -> {
+          let result = msg |> json.parse(api.incoming_decoder())
+          case result {
+            Ok(incoming) -> {
+              case incoming {
+                api.HostRequest ->
+                  process.send(context.hub_subject, hub.HostRequest(user_id))
+              }
+            }
+            Error(_) -> Nil
+          }
+          mist.continue(state)
+        }
+        mist.Custom(out) -> {
+          let result =
+            out
+            |> api.outgoing_to_json()
+            |> json.to_string()
+            |> mist.send_text_frame(conn, _)
+          case result {
+            Ok(_) -> mist.continue(state)
+            Error(_) -> mist.stop()
+          }
+        }
         mist.Binary(_) -> mist.continue(state)
         mist.Closed | mist.Shutdown -> mist.stop()
       }
