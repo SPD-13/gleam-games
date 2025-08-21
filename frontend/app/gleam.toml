@@ -16,6 +16,8 @@ target = "javascript"
 [dependencies]
 gleam_stdlib = ">= 0.44.0 and < 2.0.0"
 lustre = ">= 5.2.1 and < 6.0.0"
+gluid = ">= 1.1.0 and < 2.0.0"
+lustre_websocket = ">= 0.9.0 and < 1.0.0"
 
 [dev-dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"
