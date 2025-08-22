@@ -1,20 +1,20 @@
-import app/api.{type Outgoing}
 import gleam/dict
 import gleam/erlang/process.{type Subject}
 import gleam/int
 import gleam/list
 import gleam/otp/actor
 import gleam/string
+import shared.{type ServerMessage}
 
 type State {
   State(
-    clients: dict.Dict(String, Subject(Outgoing)),
+    clients: dict.Dict(String, Subject(ServerMessage)),
     games: dict.Dict(String, String),
   )
 }
 
 pub type Incoming {
-  Register(id: String, subject: Subject(Outgoing))
+  Register(id: String, subject: Subject(ServerMessage))
   Unregister(id: String)
   HostRequest(id: String)
 }
@@ -42,7 +42,7 @@ fn hub(state: State, message: Incoming) -> actor.Next(State, Incoming) {
       case response_subject {
         Ok(subject) -> {
           let room_code = generate_room_code()
-          process.send(subject, api.HostResponse(room_code))
+          process.send(subject, shared.HostResponse(room_code))
           actor.continue(
             State(..state, games: state.games |> dict.insert(room_code, id)),
           )

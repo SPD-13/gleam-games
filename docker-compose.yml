@@ -4,10 +4,12 @@ services:
     build: ./frontend
     image: gleam-frontend
     volumes:
-      - ./frontend/app:/app
+      - ./frontend:/app/frontend
+      - ./shared:/app/shared
 
   server:
     build: ./backend
     image: gleam-backend
     volumes:
-      - ./backend/app:/app
+      - ./backend:/app/backend
+      - ./shared:/app/shared

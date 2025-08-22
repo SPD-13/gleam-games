@@ -1,4 +1,3 @@
-import app/api
 import app/context
 import app/hub
 import gleam/bytes_tree
@@ -9,6 +8,7 @@ import gleam/json
 import gleam/list
 import gleam/option.{Some}
 import mist
+import shared
 
 pub fn handle_websocket(req, context: context.Context) {
   use user_id <- get_user_id(req)
@@ -17,11 +17,11 @@ pub fn handle_websocket(req, context: context.Context) {
     fn(state, message, conn) {
       case message {
         mist.Text(msg) -> {
-          let result = msg |> json.parse(api.incoming_decoder())
+          let result = msg |> json.parse(shared.client_message_decoder())
           case result {
             Ok(incoming) -> {
               case incoming {
-                api.HostRequest ->
+                shared.HostRequest ->
                   process.send(context.hub_subject, hub.HostRequest(user_id))
               }
             }
@@ -32,8 +32,8 @@ pub fn handle_websocket(req, context: context.Context) {
         mist.Custom(out) -> {
           let result =
             out
-            |> api.outgoing_to_json()
-            |> json.to_string()
+            |> shared.server_message_to_json
+            |> json.to_string
             |> mist.send_text_frame(conn, _)
           case result {
             Ok(_) -> mist.continue(state)
