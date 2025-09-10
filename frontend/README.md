@@ -6,6 +6,7 @@
 ```sh
 gleam add app@1
 ```
+
 ```gleam
 import app
 
@@ -19,6 +20,8 @@ Further documentation can be found at <https://hexdocs.pm/app>.
 ## Development
 
 ```sh
-gleam run   # Run the project
-gleam test  # Run the tests
+# Run the project
+gleam run -m lustre/dev start --bind=0.0.0.0
+# Run the tests
+gleam test
 ```

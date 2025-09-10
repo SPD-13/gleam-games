@@ -23,6 +23,7 @@ pub fn main() {
       }
     }
     |> mist.new
+    |> mist.bind("0.0.0.0")
     |> mist.port(8000)
     |> mist.start
 

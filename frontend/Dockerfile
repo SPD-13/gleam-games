@@ -1,6 +1,6 @@
 FROM ghcr.io/gleam-lang/gleam:v1.12.0-erlang
-WORKDIR /app
+WORKDIR /app/frontend
 RUN apt-get update && \
     apt-get install -y inotify-tools && \
     rm -rf /var/lib/apt/lists/*
-CMD ["tail", "-f", "/dev/null"]
+CMD ["gleam", "run", "-m", "lustre/dev", "start", "--bind=0.0.0.0"]

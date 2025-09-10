@@ -1,21 +1,19 @@
 {
-    "name": "gleam-games frontend",
-    "dockerComposeFile": "../docker-compose.yml",
-    "service": "web",
-    "workspaceFolder": "/app",
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "esbenp.prettier-vscode",
-                "gleam.gleam"
-            ],
-            "settings": {
-                "editor.formatOnSave": true,
-                "editor.defaultFormatter": "esbenp.prettier-vscode",
-                "[gleam]": {
-                    "editor.defaultFormatter": "gleam.gleam"
-                }
-            }
+  "name": "gleam-games frontend",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "web",
+  "workspaceFolder": "/app",
+  "overrideCommand": true,
+  "customizations": {
+    "vscode": {
+      "extensions": ["esbenp.prettier-vscode", "gleam.gleam"],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "[gleam]": {
+          "editor.defaultFormatter": "gleam.gleam"
         }
+      }
     }
+  }
 }

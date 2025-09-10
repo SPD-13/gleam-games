@@ -3,6 +3,8 @@ services:
   web:
     build: ./frontend
     image: gleam-frontend
+    ports:
+      - "1234:1234"
     volumes:
       - ./frontend:/app/frontend
       - ./shared:/app/shared
@@ -10,6 +12,8 @@ services:
   server:
     build: ./backend
     image: gleam-backend
+    ports:
+      - "8000:8000"
     volumes:
       - ./backend:/app/backend
       - ./shared:/app/shared
